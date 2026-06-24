@@ -14,6 +14,10 @@ KernelSU WebUI Add-on for **Oh My Keymint** — package name management, keybox 
 - **🌐 i18n** — English & 简体中文, auto-follows system language
 - **🖼️ Background Image** — set custom wallpaper from URL or device
 
+## 🤖 Vibe Coded
+
+Built with [Deepseek V4 Pro](https://deepseek.com) & [GLM-5.2](https://zhipu.ai)
+
 ## 🌐 Internationalization
 
 Auto-detects system language via `navigator.language` (Android system locale).
