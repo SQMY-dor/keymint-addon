@@ -1,6 +1,6 @@
 # 🔑 Keymint Addon
 
-KernelSU WebUI Add-on for **Oh My Keymint Modded** — package name management, keybox import, and service control with Apple Liquid Glass UI.
+KernelSU WebUI Add-on for **Oh My Keymint Modded** — package name management, keybox import, and service control.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -11,7 +11,6 @@ KernelSU WebUI Add-on for **Oh My Keymint Modded** — package name management, 
 - **⚙️ Service Control** — restart daemons, kill GMS, full deployment
 - **🌐 i18n** — English & 简体中文, auto-follows system language
 - **🖼️ Background Image** — set custom wallpaper from URL or device
-- **🪟 Liquid Glass UI** — Apple-style edge refraction, chromatic aberration, and elastic mouse tracking
 
 ## 🌐 Internationalization
 
