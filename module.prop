@@ -1,0 +1,6 @@
+id=oh_my_keymint_webui
+name=Oh My Keymint Modded WebUI Add-on
+version=1.0.0
+versionCode=1
+author=yourbestregard
+description=Oh My Keymint Modded 的 KernelSU WebUI 扩展包。提供包名管理、Keybox 导入和服务控制的可视化界面。支持中英文多语言。
