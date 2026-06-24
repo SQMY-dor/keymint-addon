@@ -85,13 +85,9 @@ function parseInjectorToml(text) {
         intercept: {}
     };
     const scoopMatch = text.match(/^scoop\s*=\s*\[([\s\S]*?)\]/m);
-    if (scoopMatch) { const items = scoopMatch[1].match(/
-
-"([^"]+)"/g); if (items) result.scoop = items.map(s => s.replace(/"/g, '')); }
+    if (scoopMatch) { const items = scoopMatch[1].match(/"([^"]+)"/g); if (items) result.scoop = items.map(s => s.replace(/"/g, '')); }
     const denyMatch = text.match(/deny_packages\s*=\s*\[([\s\S]*?)\]/m);
-    if (denyMatch) { const items = denyMatch[1].match(/
-
-"([^"]+)"/g); if (items) result.filter.deny_packages = items.map(s => s.replace(/"/g, '')); }
+    if (denyMatch) { const items = denyMatch[1].match(/"([^"]+)"/g); if (items) result.filter.deny_packages = items.map(s => s.replace(/"/g, '')); }
     const enabledMatch = text.match(/enabled\s*=\s*(true|false)/);
     if (enabledMatch) result.main.enabled = enabledMatch[1] === 'true';
     const logMatch = text.match(/log_level\s*=\s*"([^"]+)"/);
@@ -257,7 +253,7 @@ async function checkKeyboxStatus() {
     if (exists) {
         const r = await sh(`wc -c < ${KEYBOX_PATH}`);
         const size = parseInt(r.stdout.trim() || '0');
-        document.getElementById('kbFormat').textContent = size > 500 ? `✅ ${(size/1024).toFixed(1)}KB` : __('keybox.small') + ` (${size}B)`;
+        document.getElementById('kbFormat').textContent = size > 500 ? `✅ ${(size/1024).toFixed(1)}KB` : __('keybox.small') + ' (' + size + 'B)';
     }
 }
 
