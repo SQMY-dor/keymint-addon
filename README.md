@@ -1,6 +1,8 @@
 # 🔑 Keymint Addon
 
-KernelSU WebUI Add-on for **Oh My Keymint Modded** — package name management, keybox import, and service control.
+KernelSU WebUI Add-on for **Oh My Keymint** — package name management, keybox import, and service control.
+
+[Oh My Keymint](https://github.com/qwq233/OhMyKeymint)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -25,7 +27,7 @@ Add a language: drop a new JSON file under `webroot/i18n/`. Override via URL: `?
 
 ## 🚀 Installation
 
-Flash in **KernelSU** or **APatch** manager. Requires [Oh My Keymint Modded](https://github.com/SQMY-dor/oh_my_keymint_modded) installed first.
+Flash in **KernelSU** or **APatch** manager. Requires [Oh My Keymint](https://github.com/qwq233/OhMyKeymint) installed first.
 
 ## 📄 License
 
