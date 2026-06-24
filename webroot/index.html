@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oh My Keymint Modded</title>
+    <link rel="stylesheet" href="theme.css" type="text/css">
+    <link rel="stylesheet" href="styles.css" type="text/css">
+    <script src="i18n/i18n.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <span class="header-title" data-i18n="header.title">🔑 Oh My Keymint Modded</span>
+            <span class="header-subtitle" id="statusBadge" data-i18n="header.checking">• 检查中...</span>
+        </div>
+    </header>
+
+    <main class="content">
+        <div class="content-container" id="tabPanels">
+
+            <div class="tab-content active" id="tab-scope" role="tabpanel">
+                <section class="card glass">
+                    <div class="card-header">
+                        <h2 data-i18n="scope.title">📋 包名管理</h2>
+                        <p class="card-desc" data-i18n="scope.desc">管理 Keymint Injector 拦截的包名范围（scoop 列表）</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="scoop-controls">
+                            <div class="input-row">
+                                <input type="text" id="pkgInput" class="input-field glass-input"
+                                       data-i18n-placeholder="scope.add_placeholder"
+                                       placeholder="输入包名，如 com.example.app" spellcheck="false" autocomplete="off">
+                                <button id="btnAddPkg" class="btn btn-glass" data-i18n="scope.add_btn">➕ 添加</button>
+                            </div>
+                            <div class="deny-row">
+                                <div class="input-row">
+                                    <input type="text" id="denyPkgInput" class="input-field glass-input"
+                                           data-i18n-placeholder="scope.deny_placeholder"
+                                           placeholder="输入要拦截的包名 (deny 列表)" spellcheck="false" autocomplete="off">
+                                    <button id="btnAddDeny" class="btn btn-glass-outline" data-i18n="scope.deny_btn">⛔ 拦截</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="stats-row">
+                            <span class="stat-badge" id="scoopCount" data-i18n="scope.scoop_count">scoop: 0</span>
+                            <span class="stat-badge" id="denyCount" data-i18n="scope.deny_count">deny: 0</span>
+                            <span class="stat-badge" id="modeBadge" data-i18n="scope.mode">模式: 正常</span>
+                        </div>
+                        <div class="search-row">
+                            <input type="text" id="pkgSearch" class="input-field glass-input"
+                                   data-i18n-placeholder="scope.search_placeholder"
+                                   placeholder="🔍 搜索包名..." spellcheck="false" autocomplete="off">
+                            <button id="btnRefreshList" class="btn btn-glass-secondary" data-i18n="scope.refresh_btn">🔄 刷新</button>
+                        </div>
+                        <div class="pkg-list-container glass">
+                            <div class="pkg-list-header">
+                                <span><span data-i18n="scope.scoop_header">Scoop 列表</span> (<span id="scoopNum">0</span>)</span>
+                                <span id="denyBadgeInList"><span data-i18n="scope.deny_header">Deny</span>: <span id="denyNum">0</span></span>
+                            </div>
+                            <div id="pkgList" class="pkg-list">
+                                <div class="loading-spinner" data-i18n="scope.loading">加载中...</div>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button id="btnApplyScope" class="btn btn-glass" data-i18n="scope.apply_btn">💾 应用更改</button>
+                            <button id="btnResetScope" class="btn btn-glass-outline danger" data-i18n="scope.reset_btn">🔄 重置为所有应用</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="tab-content" id="tab-keybox" role="tabpanel">
+                <section class="card glass">
+                    <div class="card-header">
+                        <h2 data-i18n="keybox.title">🔑 Keybox 管理</h2>
+                        <p class="card-desc" data-i18n="keybox.desc">导入或更新 keybox.xml 文件</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="keybox-status glass" id="keyboxStatus">
+                            <div class="status-item">
+                                <span class="status-label" data-i18n="keybox.current">当前 Keybox:</span>
+                                <span id="kbCurrent" class="status-value loading-text" data-i18n="keybox.checking">检测中...</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label" data-i18n="keybox.format">Keybox 格式:</span>
+                                <span id="kbFormat" class="status-value">-</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label" data-i18n="keybox.backup">备份:</span>
+                                <span id="kbBackup" class="status-value">-</span>
+                            </div>
+                        </div>
+
+                        <div class="method-section glass">
+                            <h3 data-i18n="keybox.url_section">🌐 从 URL 下载</h3>
+                            <div class="input-row">
+                                <input type="text" id="keyboxUrlInput" class="input-field glass-input"
+                                       data-i18n-placeholder="keybox.url_placeholder"
+                                       placeholder="https://example.com/keybox.xml" spellcheck="false" autocomplete="off">
+                                <button id="btnDownloadKeybox" class="btn btn-glass" data-i18n="keybox.download_btn">⬇️ 下载</button>
+                            </div>
+                            <div id="downloadProgress" class="progress-container hidden">
+                                <div class="progress-bar"><div class="progress-fill" id="dlProgressFill"></div></div>
+                                <span class="progress-text" id="dlProgressText" data-i18n="keybox.downloading">下载中...</span>
+                            </div>
+                        </div>
+
+                        <div class="method-section glass">
+                            <h3 data-i18n="keybox.paste_section">📝 粘贴内容</h3>
+                            <textarea id="keyboxTextArea" class="textarea-field glass-input" rows="6"
+                                      data-i18n-placeholder="keybox.paste_placeholder"
+                                      placeholder="在此粘贴 keybox.xml 的完整内容..."></textarea>
+                            <button id="btnPasteKeybox" class="btn btn-glass" data-i18n="keybox.import_btn">📥 导入</button>
+                        </div>
+
+                        <div class="method-section glass">
+                            <h3 data-i18n="keybox.file_section">📁 文件上传（浏览设备目录）</h3>
+                            <div class="file-upload-area glass" id="fileUploadArea" style="cursor:pointer">
+                                <span class="upload-icon">📂</span>
+                                <span id="fileUploadLabel" data-i18n="keybox.file_placeholder">点击选择 keybox.xml 文件</span>
+                            </div>
+                            <div id="fileNameDisplay" class="file-name hidden"></div>
+                            <button id="btnUploadKeybox" class="btn btn-glass hidden" data-i18n="keybox.confirm_btn">📥 确认部署</button>
+                            <div id="uploadProgress" class="progress-container hidden">
+                                <div class="progress-bar"><div class="progress-fill" id="upProgressFill"></div></div>
+                                <span class="progress-text" id="upProgressText" data-i18n="keybox.processing">处理中...</span>
+                            </div>
+                        </div>
+
+                        <div class="modal-overlay" id="fileBrowserModal" style="display:none">
+                            <div class="modal glass">
+                                <div class="modal-header">
+                                    <span class="modal-title" data-i18n="keybox.browser_title">浏览设备文件</span>
+                                    <button class="btn-icon modal-close" id="fileBrowserClose" data-i18n="modal.close">✕</button>
+                                </div>
+                                <div class="modal-path glass" id="fileBrowserPath">/storage/emulated/0</div>
+                                <div class="modal-search">
+                                    <input type="text" id="fileBrowserSearch" class="input-field glass-input"
+                                           data-i18n-placeholder="keybox.browser_search"
+                                           placeholder="🔍 筛选 .xml 文件">
+                                </div>
+                                <div class="modal-file-list" id="fileBrowserList">
+                                    <div class="loading-spinner" data-i18n="scope.loading">加载中...</div>
+                                </div>
+                                <div class="modal-footer">
+                                    <span id="fileBrowserSelected" class="modal-selected-text" data-i18n="keybox.no_selection">未选择文件</span>
+                                    <button id="fileBrowserSelect" class="btn btn-glass" disabled data-i18n="keybox.select_btn">选择</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="tab-content" id="tab-controls" role="tabpanel">
+                <section class="card glass">
+                    <div class="card-header">
+                        <h2 data-i18n="controls.title">⚙️ 服务控制</h2>
+                        <p class="card-desc" data-i18n="controls.desc">控制 Oh My Keymint 的守护进程</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="daemon-status" id="daemonStatus">
+                            <div class="daemon-card glass">
+                                <div class="daemon-icon">🔐</div>
+                                <div class="daemon-info">
+                                    <span class="daemon-name" data-i18n="controls.keymint_daemon">Keymint Daemon</span>
+                                    <span id="keymintDaemonStatus" class="daemon-state unknown" data-i18n="controls.unknown">未知</span>
+                                </div>
+                            </div>
+                            <div class="daemon-card glass">
+                                <div class="daemon-icon">🔌</div>
+                                <div class="daemon-info">
+                                    <span class="daemon-name" data-i18n="controls.injector_daemon">Injector Daemon</span>
+                                    <span id="injectorDaemonStatus" class="daemon-state unknown" data-i18n="controls.unknown">未知</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="control-buttons">
+                            <button id="btnRefreshStatus" class="btn btn-glass-secondary" data-i18n="controls.refresh_status">🔄 刷新状态</button>
+                        </div>
+                        <div class="control-buttons-grid">
+                            <button id="btnRestartKeymint" class="btn btn-glass-warning" data-i18n="controls.restart_keymint">🔄 重启 Keymint</button>
+                            <button id="btnRestartInjector" class="btn btn-glass-warning" data-i18n="controls.restart_injector">🔄 重启 Injector</button>
+                            <button id="btnRestartAll" class="btn btn-glass" data-i18n="controls.restart_all">🔄 重启全部</button>
+                            <button id="btnKillGms" class="btn btn-glass-outline" data-i18n="controls.kill_gms">🛑 杀死 GMS</button>
+                        </div>
+                        <div class="quick-actions">
+                            <h3 data-i18n="controls.quick_actions">⚡ 快捷操作</h3>
+                            <div class="quick-actions-grid">
+                                <button id="btnSetScopeOnly" class="btn btn-glass-outline" data-i18n="controls.scope_only">📋 仅更新 Scope</button>
+                                <button id="btnDeployAll" class="btn btn-glass" data-i18n="controls.full_deploy">🚀 完整部署</button>
+                            </div>
+                        </div>
+                        <div class="log-section">
+                            <div class="log-header">
+                                <h3 data-i18n="controls.log_section">📜 执行日志</h3>
+                            </div>
+                            <div id="logOutput" class="log-output glass">
+                                <div class="log-empty" data-i18n="controls.log_ready">就绪</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="tab-content" id="tab-about" role="tabpanel">
+                <section class="card glass">
+                    <div class="card-header">
+                        <h2 data-i18n="about.title">ℹ️ 关于</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="about-info">
+                            <div class="about-row">
+                                <span class="about-label" data-i18n="about.module_name">模块名称</span>
+                                <span class="about-value" data-i18n="about.module_value">Oh My Keymint Modded</span>
+                            </div>
+                            <div class="about-row">
+                                <span class="about-label" data-i18n="about.version">版本</span>
+                                <span class="about-value" id="aboutVersion">1.2.0-67dc5e7</span>
+                            </div>
+                            <div class="about-row">
+                                <span class="about-label" data-i18n="about.author">作者</span>
+                                <span class="about-value" data-i18n="about.authors">James Clef, yourbestregard</span>
+                            </div>
+                            <div class="about-row">
+                                <span class="about-label" data-i18n="about.webui">WebUI</span>
+                                <span class="about-value">v1.0.0</span>
+                            </div>
+                            <div class="about-row">
+                                <span class="about-label" data-i18n="about.install_path">安装路径</span>
+                                <span class="about-value" id="aboutPath">/data/adb/modules/oh_my_keymint</span>
+                            </div>
+                            <div class="about-row">
+                                <span class="about-label" data-i18n="about.data_dir">数据目录</span>
+                                <span class="about-value">/data/misc/keystore/omk</span>
+                            </div>
+                        </div>
+                        <hr class="divider glass">
+                        <p class="about-description" data-i18n="about.description">用于绕过 Android Key Attestation 的自定义 keystore 实现。</p>
+                        <div class="about-links">
+                            <a class="btn btn-glass-outline" href="#" id="linkGithub" target="_blank" data-i18n="about.github">GitHub</a>
+                            <a class="btn btn-glass-outline" href="#" id="linkTelegram" target="_blank" data-i18n="about.telegram">Telegram</a>
+                        </div>
+                        <hr class="divider glass">
+                        <div class="bg-settings">
+                            <div class="bg-header">
+                                <h3 data-i18n="about.bg_settings">🖼️ 背景图</h3>
+                                <button id="btnClearBg" class="btn-small glass" data-i18n="about.clear_bg">清除背景</button>
+                            </div>
+                            <div class="bg-preview glass" id="bgPreview">
+                                <span class="bg-placeholder" data-i18n="about.no_bg">未设置背景</span>
+                            </div>
+                            <div class="input-row">
+                                <input type="text" id="bgUrlInput" class="input-field glass-input"
+                                       data-i18n-placeholder="about.bg_url_placeholder"
+                                       placeholder="输入图片 URL 或路径" spellcheck="false" autocomplete="off">
+                                <button id="btnSetBgUrl" class="btn btn-glass" data-i18n="about.apply_bg">应用</button>
+                            </div>
+                            <div class="bg-file-upload glass" id="bgFileArea" style="cursor:pointer">
+                                <span data-i18n="about.file_browse">📁 从设备浏览图片</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="tab-bar" role="tablist">
+            <button class="tab-btn active" data-tab="scope" role="tab" aria-selected="true">
+                <span class="tab-icon">📋</span><span class="tab-label" data-i18n="tabs.scope">包名管理</span>
+            </button>
+            <button class="tab-btn" data-tab="keybox" role="tab">
+                <span class="tab-icon">🔑</span><span class="tab-label" data-i18n="tabs.keybox">Keybox</span>
+            </button>
+            <button class="tab-btn" data-tab="controls" role="tab">
+                <span class="tab-icon">⚙️</span><span class="tab-label" data-i18n="tabs.controls">服务控制</span>
+            </button>
+            <button class="tab-btn" data-tab="about" role="tab">
+                <span class="tab-icon">ℹ️</span><span class="tab-label" data-i18n="tabs.about">关于</span>
+            </button>
+        </div>
+    </main>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <script type="module" src="webui.js"></script>
+</body>
+</html>
