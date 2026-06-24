@@ -1,0 +1,18 @@
+#!/sbin/sh
+umask 022
+ui_print() { echo "$1"; }
+OUTFD=$2
+ZIPFILE=$3
+[ -z "$MODPATH" ] && MODPATH=/dev/tmp/omk_addon
+rm -rf "$MODPATH" 2>/dev/null
+mkdir -p "$MODPATH"
+unzip -o "$ZIPFILE" -d "$MODPATH" >&2
+if [ -f "$MODPATH/customize.sh" ]; then
+  ui_print "- Running customize.sh..."
+  . "$MODPATH/customize.sh"
+else
+  ui_print "! customize.sh not found"
+  exit 1
+fi
+rm -rf "$MODPATH" 2>/dev/null
+exit 0
